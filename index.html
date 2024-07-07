@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>香港永居日期计算器</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 600px;
+            background: white;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+
+        input, button {
+            width: calc(100% - 22px);
+            padding: 10px;
+            margin: 5px 0;
+            display: block;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px; /* Adjusted for better readability */
+        }
+
+        button {
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        h2 {
+            color: #555;
+            margin-top: 20px;
+        }
+
+        .footnote {
+            font-size: 0.8em;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                background-color: white;
+            }
+
+            .container {
+                width: 100%;
+                box-shadow: none;
+                border-radius: 0;
+                padding: 20px 10px;
+            }
+
+            input, button {
+                width: 100%;
+                padding: 15px;
+                font-size: 18px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>香港永居日期计算器</h1>
+        <p>首次入境日期（见<a href="https://www.immd.gov.hk/hks/useful_information/visit-transit/endorsement-samples.html" target="_blank">入境标签/小白条</a>）:</p>
+        <p class="footnote">注：适用于持有学生签、工作签、投资移民签证、受养人签证等符合条件的签证。不适用于旅游签及其他特定非永居性签证。</p>
+        <input type="text" id="inputDate">
+        <button onclick="addDays()">计算</button>
+        <h2>最早可以申请永居的日期: <span id="earliestDate"></span></h2>
+        <h2>于香港居住满七年的日期: <span id="sevenYearDate"></span></h2>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/zh.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 获取当前UTC日期和时间
+            const todayUTC = new Date(Date.UTC(new Date().getFullYear(), new Date().getMonth(), new Date().getDate()));
+            todayUTC.setUTCDate(todayUTC.getUTCDate() - 2557);
+
+            flatpickr("#inputDate", {
+                locale: "zh", // 中文界面
+                defaultDate: todayUTC // 使用计算后的UTC日期作为默认日期
+            });
+        });
+
+        function addDays() {
+            const inputDate = document.getElementById('inputDate')._flatpickr.selectedDates[0];
+            if (!inputDate) {
+                alert("请选择一个日期。");
+                return;
+            }
+
+            // Create a new Date instance for calculations to avoid timezone issues
+            const date = new Date(Date.UTC(inputDate.getFullYear(), inputDate.getMonth(), inputDate.getDate()));
+
+            // Add the days in UTC
+            const daysToAdd = 2527;
+            date.setUTCDate(date.getUTCDate() + daysToAdd);
+            const earliestDate = date.toISOString().split('T')[0];  // Format YYYY-MM-DD
+            document.getElementById('earliestDate').textContent = earliestDate;
+
+            // Calculate the date for 7 years later in UTC
+            const sevenYearDays = 2557;
+            const sevenYearDate = new Date(Date.UTC(inputDate.getFullYear(), inputDate.getMonth(), inputDate.getDate()));
+            sevenYearDate.setUTCDate(sevenYearDate.getUTCDate() + sevenYearDays);
+            const formattedSevenYearDate = sevenYearDate.toISOString().split('T')[0];
+            document.getElementById('sevenYearDate').textContent = formattedSevenYearDate;
+        }
+
+    </script>
+</body>
+</html>
