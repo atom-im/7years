@@ -8,108 +8,38 @@
     <link rel="shortcut icon" type="image/x-icon" href="https://www.gov.hk/favicon.ico" />
     <title>香港永居日期计算器</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f4;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-        }
-
-        .container {
-            width: 90%;
-            max-width: 600px;
-            background: white;
-            padding: 20px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-            border-radius: 8px;
-        }
-
-        h1 {
-            color: #333;
-            text-align: center;
-        }
-
-        input, button {
-            width: calc(100% - 22px);
-            padding: 10px;
-            margin: 5px 0;
-            display: block;
-            box-sizing: border-box;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            font-size: 16px; /* Adjusted for better readability */
-        }
-
-        button {
-            background-color: #007BFF;
-            color: white;
-            border: none;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-
-        button:hover {
-            background-color: #0056b3;
-        }
-
-        h2 {
-            color: #555;
-            margin-top: 20px;
-        }
-
-        .footnote {
-            font-size: 0.8em;
-            color: #666;
-            margin-top: 5px;
-        }
-
-        @media (max-width: 768px) {
-            body {
-                background-color: white;
-            }
-
-            .container {
-                width: 100%;
-                box-shadow: none;
-                border-radius: 0;
-                padding: 20px 10px;
-            }
-
-            input, button {
-                width: 100%;
-                padding: 15px;
-                font-size: 18px;
-            }
-        }
-    </style>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-    <div class="container">
-        <h1>香港永居日期计算器</h1>
-        <p>首次入境日期（见<a href="https://www.immd.gov.hk/hks/useful_information/visit-transit/endorsement-samples.html" target="_blank">入境标签/小白条</a>）:</p>
-        <p class="footnote">注：适用于持有学生签、工作签、投资移民签证、受养人签证等符合条件的签证。不适用于旅游签及其他特定非永居性签证。</p>
-        <input type="text" id="inputDate">
-        <button onclick="addDays()">计算</button>
-        <h2>最早可以申请永居的日期: <span id="earliestDate"></span></h2>
-        <h2>于香港居住满七年的日期: <span id="sevenYearDate"></span></h2>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen p-4">
+    <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-lg">
+        <h1 class="text-3xl font-bold text-center text-gray-800 mb-6">香港永居日期计算器</h1>
+        <p class="text-gray-600 mb-4">首次入境日期（见<a href="https://www.immd.gov.hk/hks/useful_information/visit-transit/endorsement-samples.html" target="_blank" class="text-blue-500 underline">入境标签/小白条</a>）:</p>
+        <p class="text-sm text-gray-500 mb-6">注：适用于持有学生签、工作签、投资移民签证、受养人签证等符合条件的签证。不适用于旅游签及其他特定非永居性签证。</p>
+        <input type="text" id="inputDate" class="w-full p-3 border border-gray-300 rounded mb-4" placeholder="请选择日期">
+        <button onclick="addDays()" class="w-full p-3 bg-blue-500 text-white rounded hover:bg-blue-700 transition">计算</button>
+        <div class="mt-6 space-y-4">
+            <div class="text-lg text-gray-700">
+                <span class="block md:inline">最早可以申请永居的日期:</span>
+                <span id="earliestDate" class="block md:inline font-semibold md:ml-2"></span>
+            </div>
+            <div class="text-lg text-gray-700">
+                <span class="block md:inline">于香港居住满七年的日期:</span>
+                <span id="sevenYearDate" class="block md:inline font-semibold md:ml-2"></span>
+            </div>
+        </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/zh.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // 获取当前UTC日期和时间
+            // Get the current UTC date
             const todayUTC = new Date(Date.UTC(new Date().getFullYear(), new Date().getMonth(), new Date().getDate()));
             todayUTC.setUTCDate(todayUTC.getUTCDate() - 2557);
 
             flatpickr("#inputDate", {
-                locale: "zh", // 中文界面
-                defaultDate: todayUTC // 使用计算后的UTC日期作为默认日期
+                locale: "zh", // Chinese interface
+                defaultDate: todayUTC // Use the calculated UTC date as the default date
             });
         });
 
@@ -135,8 +65,25 @@
             sevenYearDate.setUTCDate(sevenYearDate.getUTCDate() + sevenYearDays);
             const formattedSevenYearDate = sevenYearDate.toISOString().split('T')[0];
             document.getElementById('sevenYearDate').textContent = formattedSevenYearDate;
-        }
 
+            // Get today's date in UTC
+            const today = new Date();
+            const todayUTC = new Date(Date.UTC(today.getFullYear(), today.getMonth(), today.getDate()));
+
+            // Check if the earliest date is today or earlier
+            if (new Date(earliestDate) <= todayUTC) {
+                document.getElementById('earliestDate').classList.add('text-green-500', 'font-bold');
+            } else {
+                document.getElementById('earliestDate').classList.remove('text-green-500', 'font-bold');
+            }
+
+            // Check if the seven year date is today or earlier
+            if (new Date(formattedSevenYearDate) <= todayUTC) {
+                document.getElementById('sevenYearDate').classList.add('text-green-500', 'font-bold');
+            } else {
+                document.getElementById('sevenYearDate').classList.remove('text-green-500', 'font-bold');
+            }
+        }
     </script>
 </body>
 </html>
