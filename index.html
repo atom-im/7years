@@ -9,14 +9,15 @@
     <title>香港永居日期计算器</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 </head>
 <body class="bg-gray-100 flex items-center justify-center min-h-screen p-4">
-    <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-lg">
+    <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-lg relative">
         <h1 class="text-3xl font-bold text-center text-gray-800 mb-6">香港永居日期计算器</h1>
         <p class="text-gray-600 mb-4">首次入境日期（见<a href="https://www.immd.gov.hk/hks/useful_information/visit-transit/endorsement-samples.html" target="_blank" class="text-blue-500 underline">入境标签/小白条</a>或<a href="https://mp.weixin.qq.com/s/0RSgJJ-YX9uUhjBxzBSM1w" target="_blank" class="text-blue-500 underline">出入境记录</a>）:</p>
         <p class="text-sm text-gray-500 mb-6">注：适用于持有学生签、工作签、投资移民签证、受养人签证等符合条件的签证。不适用于旅游签及其他特定非永居性签证。</p>
         <input type="text" id="inputDate" class="w-full p-3 border border-gray-300 rounded mb-4" placeholder="请选择日期">
-        <button onclick="addDays()" class="w-full p-3 bg-blue-500 text-white rounded hover:bg-blue-700 transition">计算</button>
+        <button id="calculateButton" onclick="addDays()" class="w-full p-3 bg-blue-500 text-white rounded hover:bg-blue-700 transition">计算</button>
         <div class="mt-6 space-y-4">
             <div class="text-lg text-gray-700">
                 <span class="block md:inline">最早可以申请永居的日期:</span>
@@ -27,6 +28,9 @@
                 <span id="sevenYearDate" class="block md:inline font-semibold md:ml-2"></span>
             </div>
         </div>
+        <button id="shareButton" onclick="shareImage()" class="w-full p-3 bg-green-500 text-white rounded hover:bg-green-700 transition mt-4">保存图片</button>
+        <div class="h-4"></div> <!-- 添加额外的间距 -->
+        <div id="watermark" class="absolute bottom-2 left-1/2 transform -translate-x-1/2 text-gray-700 text-xs bg-white bg-opacity-70 px-3 py-1 rounded font-bold">https://7years.atom.im</div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
@@ -83,6 +87,36 @@
             } else {
                 document.getElementById('sevenYearDate').classList.remove('text-green-500', 'font-bold');
             }
+        }
+
+        function shareImage() {
+            const element = document.querySelector('.bg-white'); // 选择你想要截图的元素
+            const shareButton = document.getElementById('shareButton');
+            const calculateButton = document.getElementById('calculateButton');
+
+            // Hide the share button and calculate button before taking the screenshot
+            shareButton.style.display = 'none';
+            calculateButton.style.display = 'none';
+
+            html2canvas(element).then(canvas => {
+                // Show the share button and calculate button again after the screenshot is taken
+                shareButton.style.display = 'block';
+                calculateButton.style.display = 'block';
+
+                // 将 canvas 转换为图片 URL
+                const imgData = canvas.toDataURL('image/png');
+
+                // 创建一个临时的 a 标签用于下载图片
+                const link = document.createElement('a');
+                link.href = imgData;
+                link.download = '香港永居日期计算器.png';
+                link.click();
+            }).catch(err => {
+                console.error('生成图片失败:', err);
+                // Show the share button and calculate button again if an error occurs
+                shareButton.style.display = 'block';
+                calculateButton.style.display = 'block';
+            });
         }
     </script>
 </body>
