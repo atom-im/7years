@@ -10,10 +10,12 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+    <script defer src="https://cloud.umami.is/script.js" data-website-id="f2c2d425-6935-4a20-9e19-c58b8ab5675b"></script>
 </head>
 <body class="bg-gray-100 flex items-center justify-center min-h-screen p-4">
     <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-lg relative">
         <h1 class="text-3xl font-bold text-center text-gray-800 mb-6">香港永居日期计算器</h1>
+        <p class="text-center text-gray-500 mb-6">👉 https://7years.atom.im 👈</p>
         <p class="text-gray-600 mb-4">首次入境日期（见<a href="https://www.immd.gov.hk/hks/useful_information/visit-transit/endorsement-samples.html" target="_blank" class="text-blue-500 underline">入境标签/小白条</a>或<a href="https://mp.weixin.qq.com/s/0RSgJJ-YX9uUhjBxzBSM1w" target="_blank" class="text-blue-500 underline">出入境记录</a>）:</p>
         <p class="text-sm text-gray-500 mb-6">注：适用于持有学生签、工作签、投资移民签证、受养人签证等符合条件的签证。不适用于旅游签及其他特定非永居性签证。</p>
         <input type="text" id="inputDate" class="w-full p-3 border border-gray-300 rounded mb-4" placeholder="请选择日期">
@@ -30,7 +32,8 @@
         </div>
         <button id="shareButton" onclick="shareImage()" class="w-full p-3 bg-green-500 text-white rounded hover:bg-green-700 transition mt-4">保存图片</button>
         <div class="h-4"></div> <!-- 添加额外的间距 -->
-        <div id="watermark" class="absolute bottom-2 left-1/2 transform -translate-x-1/2 text-gray-700 text-xs bg-white bg-opacity-70 px-3 py-1 rounded font-bold">https://7years.atom.im</div>
+        <div id="watermark" class="absolute bottom-2 left-1/2 transform -translate-x-1/2 text-gray-700 text-xs bg-white bg-opacity-70 px-3 py-1 rounded font-bold">&copy; <a href="https://www.xiaohongshu.com/user/profile/5f0c25140000000001005234">小红书号：405303732</a>
+        </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
